@@ -110,7 +110,7 @@ class _SoapLoggingKeywords(object):
 
     def _get_soap_logger(self, required=False):
         plugins = self._client().options.plugins
-        matches = filter(lambda x: isinstance(x, _SoapLogger), plugins)
+        matches = list(filter(lambda x: isinstance(x, _SoapLogger), plugins))
         if matches:
             return matches[0]
         else:

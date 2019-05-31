@@ -3,6 +3,8 @@ Suds library for Robot Framework
 
 Introduction
 ------------
+This is just a manual Python 3 port of the same Python27 package.
+
 SudsLibrary is a library for functional testing of SOAP-based web services.
 SudsLibrary is based on Suds, a dynamic SOAP 1.1 client.
 

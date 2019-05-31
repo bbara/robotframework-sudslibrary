@@ -105,11 +105,8 @@ class _OptionsKeywords(object):
         Example:
         | ${old value}= | Set Return Xml | True |
         """
-        return_xml = to_bool(return_xml)
-        # not using the retxml option built into Suds because Suds does not raise exceptions when a SOAP fault occurs
-        # when retxml=True. Instead just use the XML that is already being captured with a plugin
-        old_value = self._get_external_option("return_xml", False)
-        self._set_external_option("return_xml", return_xml)
+        old_value = self._client().options.retxml
+        self._set_boolean_option('retxml', return_xml)
         return old_value
 
     def set_http_authentication(self, username, password, type='STANDARD'):
@@ -119,11 +116,19 @@ class _OptionsKeywords(object):
         will only send credentials to the server upon request (HTTP/1.0 401
         Authorization Required) by the server only. Type ALWAYS_SEND will
         cause an Authorization header to be sent in every request. Type NTLM
-        is a Microsoft proprietary authentication scheme that requires the
-        python-ntlm package to be installed, which is not packaged with Suds
-        or SudsLibrary.
+        requires the python-ntlm package to be installed, which is not
+        packaged with Suds or SudsLibrary.
         """
-        transport = self._get_transport(type, username=username, password=password)
+        classes = {
+            'STANDARD': HttpAuthenticated,
+            'ALWAYS_SEND': AlwaysSendTransport,
+            'NTLM': WindowsHttpAuthenticated
+        }
+        try:
+            _class = classes[type.upper()]
+        except KeyError:
+            raise ValueError("'%s' is not a supported type." % type)
+        transport = _class(username=username, password=password)
         self._client().set_options(transport=transport)
 
     def set_location(self, url, service=None, names=None):
@@ -145,7 +150,7 @@ class _OptionsKeywords(object):
             service = 0
         elif not service is None:
             service = parse_index(service)
-        if isinstance(names, basestring):
+        if isinstance(names, str):
             names = names.split(",")
         if service is None:
             for svc in wsdl.services:
@@ -173,7 +178,7 @@ class _OptionsKeywords(object):
         the namespace http://some/namespace/A if it is not already imported:
         | Add Doctor Import | http://schemas.xmlsoap.org/soap/encoding/ | filters=http://some/namespace/A |
         """
-        if isinstance(filters, basestring):
+        if isinstance(filters, str):
             filters = filters.split(",")
         imp = Import(import_namespace, location)
         if not filters is None:
@@ -214,30 +219,3 @@ class _OptionsKeywords(object):
     def _set_soap_timeout(self, timeout):
         timeout_in_secs = robot.utils.timestr_to_secs(timeout)
         self._client().set_options(timeout=timeout_in_secs)
-
-    def _get_external_option(self, name, default):
-        value = default
-        if self._client() in self._external_options:
-            options = self._external_options[self._client()]
-            value = options.get(name, default)
-        return value
-
-    def _set_external_option(self, name, value):
-        if self._client() not in self._external_options:
-            self._external_options[self._client()] = {}
-        old_value = self._external_options[self._client()].get(name, None)
-        self._external_options[self._client()][name] = value
-        return old_value
-
-    def _get_transport(self, auth_type, username, password):
-        classes = {
-            'STANDARD': HttpAuthenticated,
-            'ALWAYS_SEND': AlwaysSendTransport,
-            'NTLM': WindowsHttpAuthenticated
-        }
-        try:
-            _class = classes[auth_type.upper().strip()]
-        except KeyError:
-            raise ValueError("'%s' is not a supported authentication type." % auth_type)
-        transport = _class(username=username, password=password)
-        return transport
