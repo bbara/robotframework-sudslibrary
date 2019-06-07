@@ -15,7 +15,7 @@ Installation
 
 You can install SudsLibrary using pip, with the following command
 
-  ``pip install robotframework-sudslibrary``
+  ``pip install robotframework-sudslibrary3``
   
 Binary installers are available on `PyPI`_, but they do not include Suds, a required package.
 

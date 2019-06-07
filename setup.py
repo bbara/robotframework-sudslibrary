@@ -31,13 +31,13 @@ suds_rqmnt = 'suds-jurko'
 suds_rqmnt = os.environ.get('SUDS_LIBRARY_SUDS_REQUIREMENT', suds_rqmnt)
 
 
-setup(name         = 'robotframework-sudslibrary',
+setup(name         = 'robotframework-sudslibrary3',
       version      = VERSION,
       description  = 'Robot Framework test library for SOAP-based services.',
       long_description = DESCRIPTION,
       author       = 'Kevin Ormbrek',
       author_email = '<kormbrek@gmail.com>',
-      url          = 'https://github.com/ombre42/robotframework-sudslibrary',
+      url          = 'https://github.com/ludovicurbain/robotframework-sudslibrary',
       license      = 'Apache License 2.0',
       keywords     = 'robotframework testing testautomation soap suds web service',
       platforms    = 'any',

@@ -1,8 +1,8 @@
 Metadata-Version: 1.1
 Name: robotframework-sudslibrary3
-Version: 0.8
+Version: 0.9
 Summary: Robot Framework test library for SOAP-based services.
-Home-page: https://github.com/ombre42/robotframework-sudslibrary
+Home-page: https://github.com/ludovicurbain/robotframework-sudslibrary
 Author: Kevin Ormbrek
 Author-email: <kormbrek@gmail.com>
 License: Apache License 2.0
