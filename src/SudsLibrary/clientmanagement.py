@@ -16,9 +16,12 @@ import os
 import urllib
 from suds.xsd.doctor import ImportDoctor
 from suds.transport.http import HttpAuthenticated
-from urllib.parse import urlparse
 from suds.client import Client
 from .utils import *
+try:
+    from urllib.parse import urlparse
+except ImportError:
+    from urlparse import urlparse
 
 
 class _ClientManagementKeywords(object):
