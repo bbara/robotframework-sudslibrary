@@ -115,5 +115,5 @@ class _ClientManagementKeywords(object):
         if not len(urlparse(url_or_path).scheme) > 1:
             if not os.path.isfile(url_or_path):
                 raise IOError("File '%s' not found." % url_or_path)
-            url_or_path = 'file:' + urllib.pathname2url(url_or_path)
+            url_or_path = 'file:' + urllib.request.pathname2url(url_or_path)
         return url_or_path
